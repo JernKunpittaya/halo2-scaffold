@@ -24,8 +24,8 @@ fn some_algorithm_in_zk<F: ScalarField>(
     // More advanced usage with multi-threaded witness generation is possible, but we do not explain it here
 
     let bytes = ctx.assign_witnesses(input.arr.iter().map(|b| F::from_str_vartime(b).expect("deserialize field element should not fail")));
-    // constraint length of input array make it 10 to make it easier than 1000
-    assert_eq!(bytes.len(), 10);
+    // constraint length of input array 
+    assert_eq!(bytes.len(), 1000);
     for byte in &bytes{
         // make it public
         make_public.push(*byte);
@@ -39,7 +39,7 @@ fn some_algorithm_in_zk<F: ScalarField>(
     for idx in input.start..=input.end {
         output.push(gate.select_from_idx(ctx, bytes.clone(), Constant(F::from(idx as u64))));
     }
-    let left_over = 10-(input.end-input.start+1);
+    let left_over = 1000-(input.end-input.start+1);
     let zero_const = ctx.load_witness(F::from(0));
     for _idx in 0..left_over{
         output.push(zero_const);
@@ -48,7 +48,7 @@ fn some_algorithm_in_zk<F: ScalarField>(
         // make it public
         make_public.push(*out_byte);
     }
-    for idx in 0..10{
+    for idx in 0..1000{
         println!("Index {:?}: {:?}",idx, output.get(idx).unwrap().value());
     }
     
